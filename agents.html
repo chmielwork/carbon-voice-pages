@@ -102,7 +102,7 @@
 
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
-  .landing { min-height: 100vh; overflow-x: hidden; }
+  .landing { overflow-x: hidden; }
 
   /* HERO */
   .hero {
@@ -111,7 +111,7 @@
     position: relative;
   }
   .hero-bg {
-    position: fixed; top: 0; left: 0; right: 0; height: 600px;
+    position: absolute; top: 0; left: 0; right: 0; height: 600px;
     background: radial-gradient(ellipse 80% 60% at 60% -10%, rgba(108,95,230,0.06) 0%, transparent 70%);
     pointer-events: none; z-index: 0;
   }
