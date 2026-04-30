@@ -780,15 +780,27 @@
     }, 100);
   }
 
+  // Self-initiated: on load, font ready, resize
   window.addEventListener('load', sendHeight);
   document.fonts.ready.then(sendHeight);
   window.addEventListener('load', () => {
     setTimeout(sendHeight, 400);
-    setTimeout(sendHeight, 1000);
-    setTimeout(sendHeight, 2500);
-    setTimeout(sendHeight, 5000);
+    setTimeout(sendHeight, 1200);
+    setTimeout(sendHeight, 3000);
   });
-  window.addEventListener('resize', sendHeight);
+  window.addEventListener('resize', () => {
+    sendHeight();
+    // Extra shots after resize to catch reflow settling
+    setTimeout(sendHeight, 300);
+    setTimeout(sendHeight, 800);
+  });
+
+  // Respond to Velo requesting a fresh measurement (two-way handshake)
+  window.addEventListener('message', (event) => {
+    let data = event.data;
+    if (typeof data === 'string') { try { data = JSON.parse(data); } catch(e) {} }
+    if (data && data.type === 'request-height') sendHeight();
+  });
 </script>
 
 <script>
