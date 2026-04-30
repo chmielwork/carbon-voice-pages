@@ -780,22 +780,15 @@
     }, 100);
   }
 
-  // Fire on load and font ready
   window.addEventListener('load', sendHeight);
   document.fonts.ready.then(sendHeight);
-
-  // ResizeObserver: fires precisely when content height changes (viewport reflow, font swap, etc.)
   window.addEventListener('load', () => {
-    const landing = document.querySelector('.landing');
-    if (landing && window.ResizeObserver) {
-      new ResizeObserver(sendHeight).observe(landing);
-    } else {
-      // Fallback for browsers without ResizeObserver
-      window.addEventListener('resize', sendHeight);
-      setTimeout(sendHeight, 500);
-      setTimeout(sendHeight, 1500);
-    }
+    setTimeout(sendHeight, 400);
+    setTimeout(sendHeight, 1000);
+    setTimeout(sendHeight, 2500);
+    setTimeout(sendHeight, 5000);
   });
+  window.addEventListener('resize', sendHeight);
 </script>
 
 <script>
