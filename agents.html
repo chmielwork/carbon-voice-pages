@@ -118,12 +118,69 @@
     padding: 120px 48px 100px;
     max-width: var(--cv-max-width); margin: 0 auto;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 56px;
   }
   .hero-bg {
     position: absolute; top: 0; left: 0; right: 0; height: 600px;
     background: radial-gradient(ellipse 80% 60% at 60% -10%, rgba(108,95,230,0.06) 0%, transparent 70%);
     pointer-events: none; z-index: 0;
   }
+  .hero-content {
+    flex: 0 0 44%;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+  /* HERO VIDEO */
+  .hero-video {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-video-inner {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: var(--cv-border-width) solid var(--cv-color-border);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+    background: var(--cv-bg-secondary);
+    aspect-ratio: 16/10;
+    width: 100%;
+  }
+  .hero-video-inner video {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .hero-video-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    background: var(--cv-bg-secondary);
+    transition: opacity 0.2s;
+  }
+  .hero-video-placeholder.hidden { display: none; }
+  .hero-video-placeholder svg { opacity: 0.3; }
+  .video-import-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: var(--cv-radius-full);
+    border: var(--cv-border-width) solid var(--cv-color-border);
+    background: var(--cv-bg-primary); font-family: var(--cv-font-body);
+    font-size: 13px; font-weight: 500; color: var(--cv-text-primary);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .video-import-btn:hover { border-color: rgba(108,95,230,0.35); background: rgba(108,95,230,0.04); color: var(--cv-color-primary-4); }
+  .video-import-hint { font-size: 11px; color: var(--cv-text-muted); font-family: var(--cv-font-body); }
+  .video-change-btn {
+    position: absolute; bottom: 12px; right: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: var(--cv-radius-full);
+    border: none; background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+    font-family: var(--cv-font-body); font-size: 12px; font-weight: 500;
+    color: #fff; cursor: pointer; transition: background 0.2s;
+    opacity: 0; pointer-events: none;
+  }
+  .hero-video-inner:hover .video-change-btn { opacity: 1; pointer-events: auto; }
   .hero-tag {
     display: inline-flex; align-items: center; gap: var(--cv-space-xs);
     font-family: var(--cv-font-body); font-size: 12px; color: var(--cv-color-primary-4);
@@ -431,7 +488,10 @@
   .compare-panel.active { display: block; }
 
   @media (max-width: 768px) {
-    .hero { padding: 80px 24px 60px; }
+    .hero { padding: 80px 24px 60px; flex-direction: column; gap: 40px; align-items: stretch; }
+    .hero-content { flex: none; width: 100%; }
+    .hero-video { width: 100%; }
+    .hero-video-inner { aspect-ratio: 16/9; border-radius: 16px; }
     .section { padding: 60px 24px; }
     .solution-grid, .diff-grid, .audience-grid, .use-cases-grid { grid-template-columns: 1fr; }
     .diff-card:nth-child(n) { border-right: none; border-bottom: var(--cv-border-width) solid var(--cv-color-border); }
@@ -485,35 +545,61 @@
 <!-- HERO -->
   <div class="hero-bg"></div>
   <section class="hero">
-    <div class="hero-tag">
-      <div class="hero-tag-dot"></div>
-      Voice API for AI Agents
+    <!-- LEFT: text content -->
+    <div class="hero-content">
+      <div class="hero-tag">
+        <div class="hero-tag-dot"></div>
+        Voice API for AI Agents
+      </div>
+      <h1>
+        Talk to your<br />
+        <span class="word-cycle">
+          <span class="word active">agents.</span>
+          <span class="word">Tasklet.</span>
+          <span class="word">Mem0.</span>
+          <span class="word">n8n.</span>
+          <span class="word">OpenClaw.</span>
+          <span class="word">and more.</span>
+        </span>
+      </h1>
+      <p class="hero-sub">
+        The Carbon Voice API is the voice interface your agents are missing —
+        <strong>async, voice-first, and ready in minutes.</strong>
+      </p>
+      <div class="hero-ctas">
+        <button class="btn-primary">Get started free</button>
+        <button class="btn-secondary">Read the docs</button>
+      </div>
+      <div class="hero-pills">
+        <span class="pill">voice-first</span>
+        <span class="pill">async-first</span>
+        <span class="pill">mobile-first</span>
+        <span class="pill">STT + TTS built in</span>
+        <span class="pill">works with n8n · Tasklet · any LLM</span>
+      </div>
     </div>
-    <h1>
-      Talk to your<br />
-      <span class="word-cycle">
-        <span class="word active">agents.</span>
-        <span class="word">Tasklet.</span>
-        <span class="word">Mem0.</span>
-        <span class="word">n8n.</span>
-        <span class="word">OpenClaw.</span>
-        <span class="word">and more.</span>
-      </span>
-    </h1>
-    <p class="hero-sub">
-      The Carbon Voice API is the voice interface your agents are missing —
-      <strong>async, voice-first, and ready in minutes.</strong>
-    </p>
-    <div class="hero-ctas">
-      <button class="btn-primary">Get started free</button>
-      <button class="btn-secondary">Read the docs</button>
-    </div>
-    <div class="hero-pills">
-      <span class="pill">voice-first</span>
-      <span class="pill">async-first</span>
-      <span class="pill">mobile-first</span>
-      <span class="pill">STT + TTS built in</span>
-      <span class="pill">works with n8n · Tasklet · any LLM</span>
+
+    <!-- RIGHT: video -->
+    <div class="hero-video">
+      <div class="hero-video-inner">
+        <video id="hero-video-el" playsinline muted loop controls style="display:none;"></video>
+        <div class="hero-video-placeholder" id="hero-video-placeholder">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="8" width="26" height="24" rx="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M28 16l10-6v20l-10-6V16z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <label for="hero-video-input" class="video-import-btn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3-3 3 3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Import video
+          </label>
+          <input type="file" id="hero-video-input" accept="video/*" style="display:none;" />
+          <span class="video-import-hint">MP4, MOV or WebM</span>
+        </div>
+        <button class="video-change-btn" id="hero-video-change">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6a5 5 0 1010 0A5 5 0 001 6z" stroke="currentColor" stroke-width="1.3"/><path d="M6 4v4M4 6h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Change video
+        </button>
+      </div>
     </div>
   </section>
 
@@ -867,6 +953,29 @@
     if (typeof data === 'string') { try { data = JSON.parse(data); } catch(e) {} }
     if (data && data.type === 'request-height') sendHeight();
   });
+
+  // Hero video import
+  (function() {
+    const input       = document.getElementById('hero-video-input');
+    const videoEl     = document.getElementById('hero-video-el');
+    const placeholder = document.getElementById('hero-video-placeholder');
+    const changeBtn   = document.getElementById('hero-video-change');
+    if (!input || !videoEl) return;
+
+    function loadFile(file) {
+      if (!file || !file.type.startsWith('video/')) return;
+      const prev = videoEl.src;
+      if (prev && prev.startsWith('blob:')) URL.revokeObjectURL(prev);
+      videoEl.src = URL.createObjectURL(file);
+      videoEl.style.display = 'block';
+      placeholder.classList.add('hidden');
+      videoEl.play().catch(() => {});
+    }
+
+    input.addEventListener('change', () => loadFile(input.files[0]));
+
+    changeBtn.addEventListener('click', () => input.click());
+  })();
 </script>
 
 <script>
