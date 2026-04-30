@@ -100,18 +100,9 @@
     --body:         var(--cv-font-body);
   }
 
-  /* Prevent iframe scroll bounce/capture without clipping content */
+  /* Prevent overscroll bounce inside the iframe */
   html, body {
     overscroll-behavior: none;
-    touch-action: none;  /* Don't handle touch scroll — let parent Wix page own it */
-  }
-  /* Re-enable touch for interactive elements so buttons/links still work */
-  a, button, input, select, textarea, label, [role="button"] {
-    touch-action: auto;
-  }
-  /* Large passive containers must allow vertical scroll to pass through to the parent page */
-  div, section, article, aside, main, header, footer {
-    touch-action: pan-y;
   }
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
@@ -957,6 +948,24 @@
     if (typeof data === 'string') { try { data = JSON.parse(data); } catch(e) {} }
     if (data && data.type === 'request-height') sendHeight();
   });
+
+  // Forward touch scroll to parent Wix page via postMessage
+  // iOS Safari never propagates iframe touch events to the parent — we must do it manually
+  (function() {
+    let lastY = null;
+    document.addEventListener('touchstart', function(e) {
+      lastY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchmove', function(e) {
+      if (lastY === null) return;
+      const dy = lastY - e.touches[0].clientY;
+      lastY = e.touches[0].clientY;
+      try { window.parent.postMessage({ type: 'cv-scroll', dy: dy }, '*'); } catch(e) {}
+    }, { passive: true });
+    document.addEventListener('touchend', function() {
+      lastY = null;
+    }, { passive: true });
+  })();
 
   // Hero video import
   (function() {
