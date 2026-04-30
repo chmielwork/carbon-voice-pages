@@ -176,17 +176,20 @@
   .hero-sub strong { color: var(--cv-text-primary); font-weight: 500; }
 
   .hero-ctas { display: flex; gap: 14px; align-items: center; }
+  .btn-primary, .btn-secondary {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 48px; border-radius: var(--cv-radius-full);
+    font-family: var(--cv-font-body); font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
   .btn-primary {
-    background: var(--cv-btn-primary-bg); color: var(--cv-btn-primary-text); border: none;
-    padding: 14px 28px; border-radius: var(--cv-radius-full);
-    font-family: var(--cv-font-body); font-weight: 600; font-size: 15px;
-    cursor: pointer; transition: all 0.2s;
+    background: var(--cv-btn-primary-bg); color: var(--cv-btn-primary-text);
+    border: none; padding: 0 28px;
   }
   .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: var(--cv-shadow-glow); }
   .btn-secondary {
     background: var(--cv-btn-secondary-bg); color: var(--cv-text-primary);
-    border: var(--cv-border-width) solid var(--cv-color-border); padding: 14px 28px; border-radius: var(--cv-radius-full);
-    font-family: var(--cv-font-body); font-size: 14px; cursor: pointer; transition: all 0.2s;
+    border: var(--cv-border-width) solid var(--cv-color-border); padding: 0 28px;
   }
   .btn-secondary:hover { border-color: rgba(0,0,0,0.2); background: var(--cv-bg-secondary); }
 
@@ -764,8 +767,8 @@
     </h2>
     <p class="closing-sub">Voice-first. Async-first. Anywhere.</p>
     <div class="closing-ctas">
-      <button class="btn-primary" style="padding:16px 36px;font-size:16px;">Get started free</button>
-      <button class="btn-secondary" style="padding:16px 28px;">Read the docs →</button>
+      <button class="btn-primary" style="padding:0 36px;">Get started free</button>
+      <button class="btn-secondary">Read the docs →</button>
     </div>
     <div class="closing-pills">
       <span class="closing-pill">No credit card required</span>
