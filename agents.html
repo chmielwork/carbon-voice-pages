@@ -101,9 +101,16 @@
   }
 
   /* Prevent iframe from capturing scroll — all scrolling handled by parent Wix page */
-  html, body {
+  html {
     overflow: hidden;
     overscroll-behavior: none;
+    touch-action: pan-y;          /* Tell iOS to pass vertical scroll to parent */
+    -webkit-overflow-scrolling: auto; /* Disable momentum scroll inside iframe */
+  }
+  body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: pan-y;
   }
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
