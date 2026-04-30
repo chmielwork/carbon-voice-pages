@@ -769,11 +769,14 @@
 
 <script>
   let sendHeightTimer;
+  let lastSentHeight = 0;
   function sendHeight() {
     clearTimeout(sendHeightTimer);
     sendHeightTimer = setTimeout(() => {
       const landing = document.querySelector('.landing');
       const h = landing ? Math.ceil(landing.getBoundingClientRect().bottom + window.scrollY) : document.body.scrollHeight;
+      if (h === lastSentHeight) return; // No change — skip to avoid Wix layout thrash
+      lastSentHeight = h;
       const msg = { type: 'cv-resize', height: h };
       try { window.parent.postMessage(JSON.stringify(msg), '*'); } catch(e) {}
       try { window.parent.postMessage(msg, '*'); } catch(e) {}
