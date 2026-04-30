@@ -770,32 +770,39 @@
 <script>
   let sendHeightTimer;
   function sendHeight() {
-    // Debounce — wait 100ms after last trigger before measuring
     clearTimeout(sendHeightTimer);
     sendHeightTimer = setTimeout(() => {
-      const h = document.documentElement.getBoundingClientRect().bottom;
-      window.parent.postMessage({ type: 'cv-resize', height: Math.ceil(h) }, '*');
+      // Force html + body to not fill viewport so scrollHeight = content height
+      document.documentElement.style.height = 'auto';
+      document.body.style.height = 'auto';
+      const h = document.body.scrollHeight;
+      const msg = { type: 'cv-resize', height: h };
+      // Try both parent and top to handle Wix's double-iframe sandbox
+      try { window.parent.postMessage(msg, '*'); } catch(e) {}
+      try { window.top.postMessage(msg, '*'); } catch(e) {}
+      // Debug bar — remove once confirmed working
+      let bar = document.getElementById('cv-debug');
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'cv-debug';
+        bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#6C5FE6;color:#fff;font-size:11px;padding:4px 8px;z-index:9999;font-family:monospace;';
+        document.body.appendChild(bar);
+      }
+      bar.textContent = 'cv-resize sent: ' + h + 'px @ ' + new Date().toLocaleTimeString();
     }, 100);
   }
 
-  // 1. On DOM ready
   document.addEventListener('DOMContentLoaded', sendHeight);
-  // 2. On full load (images etc.)
   window.addEventListener('load', sendHeight);
-  // 3. After fonts load (key fix — prevents font-swap height mismatch)
   document.fonts.ready.then(sendHeight);
-  // 4. Extra safety shots after load
   window.addEventListener('load', () => {
     setTimeout(sendHeight, 300);
     setTimeout(sendHeight, 800);
     setTimeout(sendHeight, 1500);
   });
-  // 5. On resize
   window.addEventListener('resize', sendHeight);
-  // 6. Watch for DOM changes but ignore class-only changes (animation)
   new MutationObserver((mutations) => {
-    const hasStructural = mutations.some(m => m.type === 'childList');
-    if (hasStructural) sendHeight();
+    if (mutations.some(m => m.type === 'childList')) sendHeight();
   }).observe(document.body, { subtree: true, childList: true });
 </script>
 
