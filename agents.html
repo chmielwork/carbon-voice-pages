@@ -768,15 +768,35 @@
 </div>
 
 <script>
+  let sendHeightTimer;
   function sendHeight() {
-    window.parent.postMessage({
-      type: 'cv-resize',
-      height: document.body.scrollHeight
-    }, '*');
+    // Debounce — wait 100ms after last trigger before measuring
+    clearTimeout(sendHeightTimer);
+    sendHeightTimer = setTimeout(() => {
+      const h = document.documentElement.getBoundingClientRect().bottom;
+      window.parent.postMessage({ type: 'cv-resize', height: Math.ceil(h) }, '*');
+    }, 100);
   }
+
+  // 1. On DOM ready
+  document.addEventListener('DOMContentLoaded', sendHeight);
+  // 2. On full load (images etc.)
   window.addEventListener('load', sendHeight);
+  // 3. After fonts load (key fix — prevents font-swap height mismatch)
+  document.fonts.ready.then(sendHeight);
+  // 4. Extra safety shots after load
+  window.addEventListener('load', () => {
+    setTimeout(sendHeight, 300);
+    setTimeout(sendHeight, 800);
+    setTimeout(sendHeight, 1500);
+  });
+  // 5. On resize
   window.addEventListener('resize', sendHeight);
-  new MutationObserver(sendHeight).observe(document.body, { subtree: true, childList: true });
+  // 6. Watch for DOM changes but ignore class-only changes (animation)
+  new MutationObserver((mutations) => {
+    const hasStructural = mutations.some(m => m.type === 'childList');
+    if (hasStructural) sendHeight();
+  }).observe(document.body, { subtree: true, childList: true });
 </script>
 
 <script>
