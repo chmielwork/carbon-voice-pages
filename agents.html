@@ -779,9 +779,9 @@
       // Use the smaller of the two — scrollH can be inflated by absolute elements
       const h = Math.min(landingH, scrollH);
       const msg = { type: 'cv-resize', height: h };
-      // Try both parent and top to handle Wix's double-iframe sandbox
+      // Send as both object and JSON string — Wix HtmlComponent expects JSON string
+      try { window.parent.postMessage(JSON.stringify(msg), '*'); } catch(e) {}
       try { window.parent.postMessage(msg, '*'); } catch(e) {}
-      try { window.top.postMessage(msg, '*'); } catch(e) {}
       // Debug bar — remove once confirmed working
       let bar = document.getElementById('cv-debug');
       if (!bar) {
