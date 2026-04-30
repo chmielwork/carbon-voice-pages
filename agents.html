@@ -780,6 +780,21 @@
 </div>
 
 <script>
+  // Height ruler — only visible on direct GitHub Pages URL, not inside Wix iframe
+  if (window.self === window.top) {
+    const ruler = document.createElement('div');
+    ruler.style.cssText = 'position:fixed;top:12px;right:12px;background:rgba(0,0,0,0.85);color:#fff;padding:6px 12px;border-radius:8px;font:13px/1.4 monospace;z-index:9999;pointer-events:none;';
+    document.body.appendChild(ruler);
+    function updateRuler() {
+      const landing = document.querySelector('.landing');
+      const h = landing ? Math.ceil(landing.getBoundingClientRect().bottom) : '?';
+      ruler.textContent = window.innerWidth + 'px wide → ' + h + 'px tall';
+    }
+    window.addEventListener('load', updateRuler);
+    document.fonts.ready.then(updateRuler);
+    window.addEventListener('resize', updateRuler);
+  }
+
   let sendHeightTimer;
   let lastSentHeight = 0;
   function sendHeight() {
