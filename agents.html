@@ -772,10 +772,12 @@
   function sendHeight() {
     clearTimeout(sendHeightTimer);
     sendHeightTimer = setTimeout(() => {
-      // Force html + body to not fill viewport so scrollHeight = content height
-      document.documentElement.style.height = 'auto';
-      document.body.style.height = 'auto';
-      const h = document.body.scrollHeight;
+      // Measure the .landing wrapper — this is the true content height
+      const landing = document.querySelector('.landing');
+      const landingH = landing ? Math.ceil(landing.getBoundingClientRect().bottom + window.scrollY) : 0;
+      const scrollH = document.body.scrollHeight;
+      // Use the smaller of the two — scrollH can be inflated by absolute elements
+      const h = Math.min(landingH, scrollH);
       const msg = { type: 'cv-resize', height: h };
       // Try both parent and top to handle Wix's double-iframe sandbox
       try { window.parent.postMessage(msg, '*'); } catch(e) {}
@@ -788,7 +790,7 @@
         bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#6C5FE6;color:#fff;font-size:11px;padding:4px 8px;z-index:9999;font-family:monospace;';
         document.body.appendChild(bar);
       }
-      bar.textContent = 'cv-resize sent: ' + h + 'px @ ' + new Date().toLocaleTimeString();
+      bar.textContent = 'landing=' + landingH + 'px scroll=' + scrollH + 'px → sending ' + h + 'px @ ' + new Date().toLocaleTimeString();
     }, 100);
   }
 
