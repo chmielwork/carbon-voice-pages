@@ -106,8 +106,12 @@
     touch-action: none;  /* Don't handle touch scroll — let parent Wix page own it */
   }
   /* Re-enable touch for interactive elements so buttons/links still work */
-  a, button, input, select, textarea, [role="button"] {
+  a, button, input, select, textarea, label, [role="button"] {
     touch-action: auto;
+  }
+  /* Large passive containers must allow vertical scroll to pass through to the parent page */
+  div, section, article, aside, main, header, footer {
+    touch-action: pan-y;
   }
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
