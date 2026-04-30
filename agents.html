@@ -100,15 +100,7 @@
     --body:         var(--cv-font-body);
   }
 
-  /* Prevent iframe from consuming scroll gestures — let parent Wix page own them */
-  html, body {
-    overscroll-behavior: none;
-    touch-action: none;
-  }
-  /* Re-enable tap/click for all interactive elements */
-  a, button, input, select, textarea, label, [role="button"] {
-    touch-action: auto;
-  }
+  html, body { overscroll-behavior: none; }
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
   .landing { overflow-x: hidden; }
@@ -954,23 +946,6 @@
     if (data && data.type === 'request-height') sendHeight();
   });
 
-  // Forward touch scroll to parent Wix page via postMessage
-  // iOS Safari never propagates iframe touch events to the parent — we must do it manually
-  (function() {
-    let lastY = null;
-    document.addEventListener('touchstart', function(e) {
-      lastY = e.touches[0].clientY;
-    }, { passive: true });
-    document.addEventListener('touchmove', function(e) {
-      if (lastY === null) return;
-      const dy = lastY - e.touches[0].clientY;
-      lastY = e.touches[0].clientY;
-      try { window.parent.postMessage({ type: 'cv-scroll', dy: dy }, '*'); } catch(e) {}
-    }, { passive: true });
-    document.addEventListener('touchend', function() {
-      lastY = null;
-    }, { passive: true });
-  })();
 
   // Hero video import
   (function() {
