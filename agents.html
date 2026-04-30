@@ -100,7 +100,7 @@
     --body:         var(--cv-font-body);
   }
 
-  html { overflow: hidden; }
+  html, body { overflow: hidden !important; }
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
   .landing { overflow-x: hidden; }
@@ -938,6 +938,11 @@
     setTimeout(sendHeight, 300);
     setTimeout(sendHeight, 800);
   });
+
+  // Prevent any internal iframe scroll — the Wix parent page owns all scrolling
+  window.addEventListener('scroll', function() {
+    if (window.scrollX !== 0 || window.scrollY !== 0) window.scrollTo(0, 0);
+  }, { passive: true });
 
   // Respond to Velo requesting a fresh measurement (two-way handshake)
   window.addEventListener('message', (event) => {
