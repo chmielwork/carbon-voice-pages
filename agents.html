@@ -100,17 +100,14 @@
     --body:         var(--cv-font-body);
   }
 
-  /* Prevent iframe from capturing scroll — all scrolling handled by parent Wix page */
-  html {
-    overflow: hidden;
+  /* Prevent iframe scroll bounce/capture without clipping content */
+  html, body {
     overscroll-behavior: none;
-    touch-action: pan-y;          /* Tell iOS to pass vertical scroll to parent */
-    -webkit-overflow-scrolling: auto; /* Disable momentum scroll inside iframe */
+    touch-action: none;  /* Don't handle touch scroll — let parent Wix page own it */
   }
-  body {
-    overflow: hidden;
-    overscroll-behavior: none;
-    touch-action: pan-y;
+  /* Re-enable touch for interactive elements so buttons/links still work */
+  a, button, input, select, textarea, [role="button"] {
+    touch-action: auto;
   }
   body { background: var(--cv-bg-primary); color: var(--cv-text-primary); font-family: var(--cv-font-body); }
 
